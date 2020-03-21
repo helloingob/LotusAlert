@@ -10,7 +10,6 @@ using System.Windows;
 using System.Windows.Media;
 using Color = System.Drawing.Color;
 using Point = System.Drawing.Point;
-using Xceed.Wpf.Toolkit;
 
 namespace LotusAlert
 {
