@@ -1,0 +1,18 @@
+﻿<Window x:Class="LotusAlert.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:LotusAlert"
+        mc:Ignorable="d"
+        Title="Lotus Alert" Height="297.671" Width="220.502" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+    <Grid Margin="0,0,4,0">
+        <Button x:Name="BtnStart" Content="Start" HorizontalAlignment="Left" Margin="24,22,0,0" VerticalAlignment="Top" Width="75" Click="BtnStart_Click"/>
+        <Button x:Name="BtnStop" Content="Stop" HorizontalAlignment="Left" Margin="104,22,0,0" VerticalAlignment="Top" Width="75" Click="BtnStop_Click" IsEnabled="False" />
+        <xctk:WatermarkTextBox Watermark="Enter Color, e.g.: #FF0000" x:Name="TbxColor" HorizontalAlignment="Left" Height="23" Margin="24,51,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155"/>
+        <xctk:WatermarkTextBox Watermark="Enter Coords, e.g: 1337/42" x:Name="TbxCoords" HorizontalAlignment="Left" Height="143" Margin="24,79,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto"/>
+        <Button x:Name="BtnSave" Content="Save" HorizontalAlignment="Left" Margin="24,227,0,0" VerticalAlignment="Top" Width="75" Click="BtnSave_Click"/>
+        <Label Content="by Dr.Kool" HorizontalAlignment="Left" Margin="114,224,0,0" VerticalAlignment="Top" IsEnabled="False"/>
+    </Grid>
+</Window>
