@@ -4,12 +4,19 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="Lotus Alert V1.1" Height="141.707" Width="211.396" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
+        Title="Lotus Alert V1.2" Height="181.161" Width="211.396" ResizeMode="NoResize" WindowStartupLocation="CenterScreen" Topmost="True">
     <Grid Margin="0,0,4,0">
         <Button x:Name="BtnStart" Content="Start" HorizontalAlignment="Left" Margin="24,22,0,0" VerticalAlignment="Top" Width="75" Click="BtnStart_Click"/>
         <Button x:Name="BtnStop" Content="Stop" HorizontalAlignment="Left" Margin="104,22,0,0" VerticalAlignment="Top" Width="75" Click="BtnStop_Click" IsEnabled="False" />
-        <TextBox x:Name="TbxCoords" HorizontalAlignment="Left" Height="23" Margin="24,47,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="114"/>
-        <Button x:Name="BtnSave" Content="Save" HorizontalAlignment="Left" Margin="143,47,0,0" VerticalAlignment="Top" Width="36" Click="BtnSave_Click"/>
-        <Label Content="by Dr.Kool" HorizontalAlignment="Left" Margin="114,67,0,0" VerticalAlignment="Top" IsEnabled="False"/>
+
+        <Button x:Name="BtnSave" Content="Save" HorizontalAlignment="Left" Margin="24,103,0,0" VerticalAlignment="Top" Width="36" Click="BtnSave_Click" Height="23"/>
+        <Label Content="by Dr.Kool" HorizontalAlignment="Left" Margin="69,99,0,0" VerticalAlignment="Top" IsEnabled="False"/>
+
+        <Button x:Name="BtnScreenshot" Content="Scrn" HorizontalAlignment="Left" Margin="143,103,0,0" VerticalAlignment="Top" Width="36" Height="23" Click="BtnScreenshot_Click"/>
+
+
+            <TextBox x:Name="TbxColors" HorizontalAlignment="Left" Height="23" Margin="24,47,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155" ToolTip="Add new colors to detection (#fff,#000000,...)"/>
+
+        <TextBox x:Name="TbxCoords" HorizontalAlignment="Left" Height="23" Margin="24,75,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="155" ToolTip="X-Coordinate/Y-Coordinate/Width/Height of a window to overwatch (0/0/10/10)"/>
     </Grid>
 </Window>

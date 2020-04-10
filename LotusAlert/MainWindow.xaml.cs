@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Imaging;
@@ -16,9 +17,13 @@ namespace LotusAlert
     {
         private CancellationTokenSource cancellationTokenSource;
         private readonly string CoordsFile = AppDomain.CurrentDomain.BaseDirectory + @"\coords.txt";
+        private readonly string ColorFile = AppDomain.CurrentDomain.BaseDirectory + @"\colors.txt";
         private readonly string SoundFile = AppDomain.CurrentDomain.BaseDirectory + @"\gong.mp3";
 
-        private readonly string[] NodeColorArray = { "#E1B", "#E2B", "#E3B", "#E4B", "#E5B", "#E6B", "#E7B", "#E8B", "#E9B", "#EAB" };
+        private List<string> NodeColorArray = new List<string>()
+        {
+            "#E1B", "#E2B", "#E3B", "#E4B", "#E5B", "#E6B", "#E7B", "#E8B", "#E9B", "#EAB", "#EBB"
+        };
 
         public MainWindow()
         {
@@ -32,18 +37,30 @@ namespace LotusAlert
             {
                 TbxCoords.Text = File.ReadAllText(CoordsFile, System.Text.Encoding.UTF8);
             }
+
+            if (File.Exists(ColorFile))
+            {
+                TbxColors.Text = File.ReadAllText(ColorFile, System.Text.Encoding.UTF8);
+            }
         }
 
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
-            WriteLog("Started.");
-            BtnStart.IsEnabled = false;
-            BtnStop.IsEnabled = true;
-            cancellationTokenSource = new CancellationTokenSource();
-            WatchLotusSpawn(TbxCoords.Text);
+            if (TbxCoords.Text.Length > 0)
+            {
+                WriteLog("Started.");
+                BtnStart.IsEnabled = false;
+                BtnStop.IsEnabled = true;
+                cancellationTokenSource = new CancellationTokenSource();
+                WatchLotusSpawn(TbxCoords.Text, TbxColors.Text);
+            } else
+            {
+                MessageBox.Show("Enter dimensions for rectangle as shown in the tooltip!", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                TbxCoords.Focus();
+            }
         }
 
-        private void WatchLotusSpawn(string coords)
+        private void WatchLotusSpawn(string coords, string colors)
         {
             var parts = coords.Split('/');
             int xCoord = Convert.ToInt32(parts[0]);
@@ -54,6 +71,15 @@ namespace LotusAlert
             WriteLog("Width: " + width);
             int height = Convert.ToInt32(parts[3]);
             WriteLog("Height: " + height);
+
+            if (colors.Length > 0)
+            {
+                foreach (string newColor in colors.Split(','))
+                {
+                    WriteLog("New color added: " + newColor);
+                    NodeColorArray.Add(newColor);
+                }
+            }
 
             Task.Run(() =>
             {
@@ -71,6 +97,11 @@ namespace LotusAlert
                         WriteLog("No node found.");
                     }
                     Thread.Sleep(1000);
+
+                    if (cancellationTokenSource.IsCancellationRequested)
+                    {
+                        throw new OperationCanceledException();
+                    }
                 }
             }, cancellationTokenSource.Token);
         }
@@ -96,6 +127,7 @@ namespace LotusAlert
         private void BtnSave_Click(object sender, RoutedEventArgs e)
         {
             File.WriteAllText(CoordsFile, TbxCoords.Text);
+            File.WriteAllText(ColorFile, TbxColors.Text);
         }
 
         private bool FindNode(int x, int y, int width, int height)
@@ -137,6 +169,33 @@ namespace LotusAlert
         {
             var date = DateTime.Now.ToString("dd.MM.yy HH:mm:ss.fff");
             Debug.WriteLine("[" + date + "] " + input);
+        }
+
+        private void BtnScreenshot_Click(object sender, RoutedEventArgs e)
+        {
+            var parts = TbxCoords.Text.Split('/');
+            int xCoord = Convert.ToInt32(parts[0]);
+            int yCoord = Convert.ToInt32(parts[1]);
+            int width = Convert.ToInt32(parts[2]);
+            int height = Convert.ToInt32(parts[3]);
+
+            Bitmap bitmap = new Bitmap(width, height);
+            using (Graphics g = Graphics.FromImage(bitmap))
+            {
+                g.CopyFromScreen(xCoord, yCoord, 0, 0, bitmap.Size);
+            }
+
+            Microsoft.Win32.SaveFileDialog saveFileDialog = new Microsoft.Win32.SaveFileDialog
+            {
+                FileName = "node_spawn_" + DateTime.Now.ToString("HHmmssfff") + ".bmp",
+                Filter = "Bitmap Image (.bmp)|*.bmp"
+            };
+
+            if (saveFileDialog.ShowDialog() == true)
+            {
+                bitmap.Save(saveFileDialog.FileName, ImageFormat.Bmp);
+                WriteLog("Screenshot saved to file: " + saveFileDialog.FileName);
+            }
         }
     }
 }
